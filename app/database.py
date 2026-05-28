@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 #create database connection url
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:Gideon@localhost/cartify"
 
-#set up the database engine
+#set up the database engine for connecting to the PostgreSQL database
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 #configure sessionmaker

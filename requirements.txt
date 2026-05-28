@@ -5,3 +5,6 @@ sqlalchemy
 passlib
 python-jose
 psycopg2-binary
+pydantic[email] 
+python-multipart
+bcrypt 

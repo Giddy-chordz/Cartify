@@ -1,0 +1,12 @@
+from fastapi import FastAPI, Depends, HTTPException, status
+from .database import engine, get_db
+from . import models, schemas
+from .routers import auth
+
+app = FastAPI()
+
+#create tables defined in models.py in the database
+models.Base.metadata.create_all(bind = engine)
+
+#include the authentication router
+app.include_router(auth.router)

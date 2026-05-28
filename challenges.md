@@ -1,0 +1,2 @@
+# ERROR:ValueError: password cannot be longer than 72 bytes
+# FIX: i pip installed "bycrypt==4.0.1" and it worked fine, so I added it to the requirements.txt file to ensure that the correct version of bcrypt is installed when setting up the project in the future.
