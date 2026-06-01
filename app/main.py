@@ -1,6 +1,6 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI
 from .database import engine, get_db
-from . import models, schemas
+from . import models
 from .routers import auth, products
 
 app = FastAPI()

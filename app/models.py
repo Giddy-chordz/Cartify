@@ -21,6 +21,8 @@ class Products(Base):
     name = Column(String, index=True)
     description = Column(String)
     price = Column(Integer)
+    stock = Column(Integer, default=0)
+    status = Column(String, default="available") # available, out of stock, discontinued
     is_available = Column(Boolean, default=True)# 1 for available, 0 for not available
     created_at = Column(String, default=datetime.datetime.utcnow)
 
@@ -41,4 +43,12 @@ class Cart(Base):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
     quantity = Column(Integer)
+    created_at = Column(String, default=datetime.datetime.utcnow)
+
+class ProductRating(Base):
+    __tablename__ = 'product_ratings'
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    product_id = Column(Integer, ForeignKey('products.id'), primary_key = True, nullable=False)
+    rating = Column(Integer) # ranges from 0 to 5
+    review = Column(String)
     created_at = Column(String, default=datetime.datetime.utcnow)
