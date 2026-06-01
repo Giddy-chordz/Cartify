@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from .database import engine, get_db
-from . import models
+from . import models, config
 from .routers import auth, products
+
 
 app = FastAPI()
 

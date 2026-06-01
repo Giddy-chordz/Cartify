@@ -3,6 +3,5 @@
 from ..models import ProductRating
 
 
-def rating_query(db, product_id: int, current_user):
-    return db.query(ProductRating).filter(
-        ProductRating.product_id == product_id, ProductRating.user_id == current_user.id).first()
+def rating_query(db, product_id: int):
+    return db.query(ProductRating).filter(ProductRating.product_id == product_id).all()

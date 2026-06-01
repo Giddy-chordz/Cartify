@@ -7,14 +7,14 @@ from fastapi import Depends, HTTPException, status
 from . import models
 from .database import get_db
 from sqlalchemy.orm import Session
+from .config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-secret_key = secrets.token_hex(32)  # Generate a random secret key
 
-SECRET_KEY = secret_key
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = SECRET_KEY
+ALGORITHM = ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = ACCESS_TOKEN_EXPIRE_MINUTES
 
 #function to create an access token: this function takes a dictionary of data 
 #(usually containing the user's ID) and creates a JWT access token that includes 

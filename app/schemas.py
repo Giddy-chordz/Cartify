@@ -45,7 +45,7 @@ class ProductResponse(BaseModel):
     is_available: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 #schema for cart
 class CartAdd(BaseModel):

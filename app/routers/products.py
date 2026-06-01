@@ -8,12 +8,12 @@ from typing import Optional
 from .vote_query import rating_query
 
 #instantiate router
-router = APIRouter(tags = ['add products'])
+router = APIRouter(tags = ['products'])
 
 @router.post("/add", response_model = ProductResponse)
 def add_product(products: ProductCreate, db: Session = Depends(get_db), current_user: str = Depends(get_current_user)):
     #allow users to add products
-    new_product = Products(**products.model_dump())
+    new_product = Products(**products.model_dump(), owner_id = current_user.id)
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
@@ -21,7 +21,7 @@ def add_product(products: ProductCreate, db: Session = Depends(get_db), current_
     return new_product
 
 @router.get("/", response_model = list[ProductResponse])
-def get_products(db: Session = Depends(get_db), search: Optional[str] = " "):
+def get_products(db: Session = Depends(get_db), search: Optional[str] = ""):
 
     #get all products
     all_products = db.query(Products).filter(Products.name.contains(search)).all()
@@ -29,7 +29,7 @@ def get_products(db: Session = Depends(get_db), search: Optional[str] = " "):
     #get ratings for each product and include it in the response
     products_with_ratings = []
     for product in all_products:
-        rating = rating_query(db, product.id, get_current_user)
+        rating = rating_query(db, product.id)
         product_data = ProductResponse.model_validate(product)
         if rating:
             product_data.rating = rating.rating
@@ -47,7 +47,7 @@ def get_products(db: Session = Depends(get_db), search: Optional[str] = " "):
             else:
                 product.is_available = True
 
-    return all_products
+    return products_with_ratings
 
 #get a single product by id or by search keyword
 @router.get("/items/{id}", response_model = ProductResponse)
