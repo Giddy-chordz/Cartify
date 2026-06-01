@@ -18,7 +18,7 @@ class UserSignupResponse(BaseModel):
     phone: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Schema for user signup response
 class Token(BaseModel):
@@ -49,8 +49,6 @@ class ProductResponse(BaseModel):
 
 #schema for cart
 class CartAdd(BaseModel):
-    id: int
-    user_id: int
     product_id: int
     quantity: int
 
@@ -61,8 +59,8 @@ class CartResponse(BaseModel):
     product_id: int
     quantity: int
 
-    class config:
-        orm_mode = True
+    class Config:
+        from_attributes = True
 
 class ProductRating(BaseModel):
     post_id: int
