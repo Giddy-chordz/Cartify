@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from .database import engine, get_db
 from . import models, schemas
-from .routers import auth
+from .routers import auth, products
 
 app = FastAPI()
 
@@ -10,3 +10,4 @@ models.Base.metadata.create_all(bind = engine)
 
 #include the authentication router
 app.include_router(auth.router)
+app.include_router(products.router)

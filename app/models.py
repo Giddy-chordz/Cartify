@@ -1,5 +1,5 @@
 #===SETUP DATABASE MODELS===#
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from .database import Base
 import datetime
 
@@ -17,6 +17,7 @@ class Users(Base):
 class Products(Base):
     __tablename__ = 'products'
     id = Column(Integer, primary_key=True, index=True)
+    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     name = Column(String, index=True)
     description = Column(String)
     price = Column(Integer)
@@ -27,7 +28,7 @@ class Products(Base):
 class Orders(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     product_id = Column(Integer)
     quantity = Column(Integer)
     total_price = Column(Integer)
@@ -37,7 +38,7 @@ class Orders(Base):
 class Cart(Base):
     __tablename__ = 'cart'
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer)
-    product_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
     quantity = Column(Integer)
     created_at = Column(String, default=datetime.datetime.utcnow)

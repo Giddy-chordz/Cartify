@@ -19,7 +19,7 @@ def sign_up(user: UserSignup, db: Session = Depends(get_db)):
     
     existing_user = db.query(models.Users).filter(or_(models.Users.username == user.username,
                                                       models.Users.email == user.email,
-                                                      models.Users.phone == user.phone)).first()
+                                                      models.Users.phone == user.phone).first())
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username, email, or phone already exists")
 
@@ -59,5 +59,8 @@ def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session =
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND,
                             detail = "password is incorrect")
     
-    return {"access_token": "example_token",
+    #if credentials are correct return access token
+    access_token = oauth2.create_access_token(data = {"user_id": user.id})
+
+    return {"access_token": access_token,
              "token_type": "bearer"}
