@@ -11,9 +11,9 @@ from .vote_query import rating_query
 router = APIRouter(tags = ['products'])
 
 @router.post("/add", response_model = ProductResponse)
-def add_product(products: ProductCreate, db: Session = Depends(get_db), current_user: str = Depends(get_current_user)):
+def add_product(products: ProductCreate, db: Session = Depends(get_db), current_user: str = Depends(get_current_user), admin_user: str = Depends(verify_admin_user)):
     #allow users to add products
-    new_product = Products(**products.model_dump(), owner_id = current_user.id)
+    new_product = Products(**products.model_dump(), owner_id = current_user.id, status = 'available')
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
@@ -90,5 +90,5 @@ def delete_product(id: int, db: Session = Depends(get_db), current_user: str = D
     if admin_user.role == 'admin':
         db.delete(product)
         db.commit()
-        
+
     return {"detail": f"Product with id {id} deleted successfully"}
