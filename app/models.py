@@ -11,6 +11,7 @@ class Users(Base):
     email = Column(String, unique=True, index=True)
     phone = Column(String, unique=True, index=True)
     password = Column(String)
+    role = Column(String, nullable=False, default = 'user') #user or admin
     created_at = Column(String, default=datetime.datetime.utcnow)
 
 #setup product model

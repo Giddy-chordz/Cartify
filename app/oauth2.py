@@ -68,3 +68,9 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     user = db.query(models.Users).filter(models.Users.id == token).first()
 
     return user
+
+#verify admin user
+def verify_admin_user(current_user: models.Users = Depends(get_current_user)):
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You do not have permission to perform this action")
+    return current_user

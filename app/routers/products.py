@@ -2,7 +2,7 @@ from fastapi import FastAPI, status, HTTPException, Depends, APIRouter
 from ..database import get_db
 from sqlalchemy.orm import Session
 from ..models import Products
-from ..oauth2 import get_current_user
+from ..oauth2 import get_current_user, verify_admin_user
 from ..schemas import ProductCreate, ProductRating, ProductResponse
 from typing import Optional
 from .vote_query import rating_query
@@ -70,7 +70,7 @@ def get_product(id: int, db: Session = Depends(get_db)):
 
 #delete a product by id
 @router.delete("/delete/{id}")
-def delete_post(id: int, db: Session = Depends(get_db), current_user: str = Depends(get_current_user)):
+def delete_product(id: int, db: Session = Depends(get_db), current_user: str = Depends(get_current_user), admin_user: str = Depends(verify_admin_user)):
     #delete a product by id
     product_query = db.query(Products).filter(Products.id == id)
 
@@ -82,7 +82,13 @@ def delete_post(id: int, db: Session = Depends(get_db), current_user: str = Depe
     db.delete(synchronize_session=False)
     db.commit()
 
-    #enable specific users to delete products by id
+    #enable owner of products to delete their products
     if product.owner_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You do not have permission to delete this product")
+    
+    #enable admin users to delete any product
+    if admin_user.role == 'admin':
+        db.delete(product)
+        db.commit()
+        
     return {"detail": f"Product with id {id} deleted successfully"}

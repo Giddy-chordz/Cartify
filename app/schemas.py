@@ -8,6 +8,7 @@ class UserSignup(BaseModel):
     username: str
     email: EmailStr
     phone: str
+    role: str = 'user' # default role is user, can be set to admin
     password: str
 
 #user response schema
@@ -15,6 +16,7 @@ class UserSignupResponse(BaseModel):
     id: int
     username: str
     email: EmailStr
+    role: str
     phone: str
 
     class Config:
@@ -24,6 +26,7 @@ class UserSignupResponse(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    role: str   
 
 # Schema for product creation request
 class ProductCreate(BaseModel):
@@ -63,7 +66,7 @@ class CartResponse(BaseModel):
         from_attributes = True
 
 class ProductRating(BaseModel):
-    post_id: int
+    product_id: int
     rating: int = [i for i in range(0, 5)]
     review: str
 
